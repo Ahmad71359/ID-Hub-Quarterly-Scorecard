@@ -1,0 +1,461 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DI Hub · Quarterly Scorecard</title>
+<style>
+:root{--green:#16794F;--green-br:#1FB07A;--ink:#0E241C;--ink2:#173a2d;--bg:#F7F9F8;--card:#FFFFFF;
+--line:#E5EAE7;--muted:#67776F;--txt:#16271F;--gray:#9AA8A1;--graybar:#C7D0CB;
+--shadow:0 1px 2px rgba(14,36,28,.05),0 8px 24px rgba(14,36,28,.06);--r:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt);-webkit-font-smoothing:antialiased;line-height:1.45}
+.num{font-family:Georgia,"Times New Roman",serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+header.hero{background:linear-gradient(135deg,var(--ink) 0%,var(--ink2) 60%,var(--green) 130%);color:#EAF3EF;padding:30px 0 24px;position:relative;overflow:hidden}
+header.hero:before{content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(31,176,122,.35),transparent 70%)}
+.brand{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#9FD9C1;font-weight:600}
+.herorow{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px}
+.htitle{font-family:Georgia,"Times New Roman",serif;font-weight:300;font-size:38px;line-height:1.05;margin:8px 0 4px}
+.htitle b{font-weight:600;color:var(--green-br)}
+.hsub{color:#B9CFC6;font-size:14px}
+.qsel{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:8px 12px}
+.qsel label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#9FD9C1;font-weight:600}
+.qsel select{font:inherit;font-weight:700;font-size:15px;background:transparent;border:none;color:#fff;outline:none;cursor:pointer}
+.qsel select option{color:#16271F}
+nav.tabs{position:sticky;top:0;z-index:20;background:rgba(247,249,248,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.tabrow{display:flex;gap:4px;overflow-x:auto;padding:8px 0}
+.tab{flex:0 0 auto;border:none;background:none;font:inherit;font-weight:600;font-size:14px;color:var(--muted);padding:9px 15px;border-radius:999px;cursor:pointer;transition:.18s;white-space:nowrap}
+.tab:hover{color:var(--green)} .tab.on{background:var(--green);color:#fff}
+.databar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 0 0;font-size:12.5px;color:var(--muted)}
+.dbtn{font:inherit;font-size:12.5px;font-weight:600;color:var(--green);background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 13px;cursor:pointer;transition:.15s}
+.dbtn:hover{border-color:var(--green-br);background:#F2F7F4}
+main{padding:24px 0 60px}
+.panel{display:none;animation:fade .4s ease}.panel.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.sec-h{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:21px;margin:2px 0 3px}
+.sec-s{color:var(--muted);font-size:13.5px;margin-bottom:16px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);position:relative;opacity:0;transform:translateY(10px);animation:rise .5s forwards}
+.kpi:before{content:"";position:absolute;left:0;top:0;height:3px;width:100%;background:var(--green-br);border-radius:var(--r) var(--r) 0 0}
+@keyframes rise{to{opacity:1;transform:none}}
+.kpi .v{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:34px;color:var(--green);line-height:1}
+.kpi .l{font-weight:600;font-size:13.5px;margin-top:8px}.kpi .s{color:var(--muted);font-size:12px;margin-top:3px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.mt{margin-top:14px}
+.chart-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.toggle{display:inline-flex;background:#EEF3F0;border-radius:999px;padding:3px}
+.toggle button{border:none;background:none;font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);padding:5px 12px;border-radius:999px;cursor:pointer;transition:.15s}
+.toggle button.on{background:#fff;color:var(--green);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.bars{display:flex;flex-direction:column;gap:9px;margin-top:10px}
+.brow{display:grid;grid-template-columns:104px 1fr 42px;align-items:center;gap:10px;cursor:pointer}
+.brow .bn{font-size:13px;font-weight:600;text-align:right}
+.brow .bt{height:26px;background:#F0F4F2;border-radius:7px;overflow:hidden}
+.brow .bf{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--green-br));border-radius:7px;transition:width .8s cubic-bezier(.2,.7,.2,1)}
+.brow.alt .bf{background:linear-gradient(90deg,#9AA8A1,#C2CDC7)}
+.brow .bv{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:15px;color:var(--green)}
+.brow.sel .bn{color:var(--green)} .brow:hover .bt{outline:2px solid rgba(22,121,79,.25)}
+.hint{font-size:12px;color:var(--muted);margin-top:10px}
+.funnel{display:flex;flex-direction:column;gap:8px}
+.fstep{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:11px;padding:11px 14px;background:#fff;transition:.18s;cursor:pointer}
+.fstep:hover{transform:translateX(3px);border-color:var(--green-br)}
+.fstep .fn{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:26px;width:46px;text-align:center}
+.fstep .fl{font-weight:600;font-size:14px}.fstep .fs{color:var(--muted);font-size:12px}
+.fstep.good .fn{color:var(--green)}.fstep.good{border-left:4px solid var(--green)}
+.fstep.neu .fn{color:var(--muted)}.fstep.neu{border-left:4px solid var(--graybar)}
+.fhead{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--green);margin-bottom:8px}
+.fhead small{color:var(--muted);font-weight:600;letter-spacing:0;text-transform:none;margin-left:6px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}
+.chip{border:1px solid var(--line);background:#fff;font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);padding:6px 13px;border-radius:999px;cursor:pointer;transition:.15s}
+.chip:hover{border-color:var(--green-br);color:var(--green)}.chip.on{background:var(--green);color:#fff;border-color:var(--green)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-weight:700;color:#fff;background:var(--green);padding:10px 12px}
+th:first-child{border-radius:8px 0 0 0}th:last-child{border-radius:0 8px 0 0}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr.r{cursor:pointer;transition:.12s}tr.r:hover{background:#F2F7F4}
+.tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;display:inline-block}
+.t-won{background:#E2F3EA;color:#16794F}.t-lost{background:#EFE9E7;color:#7a5a52}
+.t-pend{background:#EAF0FB;color:#3a5a8a}.t-not{background:#F0F2F1;color:#67776F}
+.t-adv{background:#E2F3EA;color:#16794F}.t-early{background:#EAF0FB;color:#3a5a8a}.t-nogo{background:#F0F2F1;color:#67776F}
+.rt{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.det{display:none;background:#F7FAF8}.det.on{display:table-row}
+.det td{padding:0 12px}.det .inner{padding:12px 2px;color:var(--muted);font-size:13px;line-height:1.6}
+.det .inner b{color:var(--txt)}
+.totbar{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:12px 14px;background:var(--ink);color:#EAF3EF;border-radius:11px;flex-wrap:wrap;gap:8px}
+.totbar .tv{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:20px;color:var(--green-br)}
+.themes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.theme{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.theme h4{background:var(--ink);color:#fff;font-size:13.5px;padding:10px 13px}
+.theme:nth-child(2) h4{background:#2b5f7a}.theme:nth-child(3) h4{background:#4a5550}
+.theme p{padding:12px 13px;font-size:13px}
+.tcallout{display:flex;gap:12px;margin-top:14px}
+.tco{flex:1;border:1px solid var(--line);border-left:4px solid var(--green);border-radius:12px;padding:14px;background:#fff}
+.tco .big{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:30px;color:var(--green)}
+.tco b{font-size:14px}.tco span{color:var(--muted);font-size:12.5px}
+.ask-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.ask-chip{border:1px solid var(--line);background:#fff;font:inherit;font-size:12.5px;font-weight:600;color:var(--green);padding:7px 13px;border-radius:999px;cursor:pointer;transition:.15s}
+.ask-chip:hover{background:var(--green);color:#fff;border-color:var(--green)}
+.ask-box{display:flex;gap:9px;margin-bottom:16px}
+.ask-box input{flex:1;font:inherit;font-size:14px;padding:13px 16px;border:1.5px solid var(--line);border-radius:12px;background:#fff;outline:none;transition:.15s}
+.ask-box input:focus{border-color:var(--green-br);box-shadow:0 0 0 3px rgba(31,176,122,.12)}
+.ask-box button{font:inherit;font-weight:700;font-size:14px;color:#fff;background:var(--green);border:none;padding:0 24px;border-radius:12px;cursor:pointer}
+.ask-box button:hover{background:var(--ink2)}.ask-box button:disabled{opacity:.5}
+.ask-log{display:flex;flex-direction:column;gap:14px}
+.ask-empty{color:var(--muted);font-size:13.5px;background:#fff;border:1px dashed var(--line);border-radius:12px;padding:18px;text-align:center}
+.qa{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);animation:fade .3s}
+.qa .q{font-weight:700;font-size:14px;color:var(--ink);display:flex;gap:8px}
+.qa .q:before{content:"Q";font-family:Georgia,"Times New Roman",serif;color:var(--green-br);font-weight:600}
+.qa .a{margin-top:9px;padding-top:9px;border-top:1px solid var(--line);font-size:14px;white-space:pre-wrap;display:flex;gap:8px}
+.qa .a:before{content:"A";font-family:Georgia,"Times New Roman",serif;color:var(--green);font-weight:600}
+.qa .a.err{color:#8a6d2f}
+.dots span{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:var(--green-br);animation:bl 1s infinite}
+.dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
+@keyframes bl{0%,80%,100%{opacity:.25}40%{opacity:1}}
+footer{border-top:1px solid var(--line);padding:18px 0;color:var(--muted);font-size:12px}
+.conf{display:inline-block;background:#FBF3E6;color:#8a6d2f;border:1px solid #EBD9B0;border-radius:8px;padding:6px 11px;font-weight:600;margin-bottom:8px}
+@media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}.themes{grid-template-columns:1fr}.tcallout{flex-direction:column}.htitle{font-size:28px}.brow{grid-template-columns:84px 1fr 36px}}
+</style>
+
+<header class="hero"><div class="wrap">
+  <div class="brand">Boston Consulting Group · International Development Hub</div>
+  <div class="herorow">
+    <div>
+      <div class="htitle">Quarterly <b>Scorecard</b></div>
+      <div class="hsub">Business development results · Internal MDP review</div>
+    </div>
+    <div class="qsel"><label>Quarter</label><select id="qPick"></select></div>
+  </div>
+</div></header>
+
+<nav class="tabs"><div class="wrap">
+  <div class="tabrow" id="tabrow"></div>
+  <div class="databar">
+    <span>Source data:</span>
+    <button class="dbtn" id="upBtn">⬆ Upload quarter (CSV)</button>
+    <button class="dbtn" id="tplBtn">⬇ Download template</button>
+    <input type="file" id="fileIn" accept=".csv" style="display:none">
+    <span id="dataMsg"></span>
+  </div>
+</div></nav>
+
+<main class="wrap">
+  <section class="panel on" id="p-overview">
+    <div class="sec-h" id="ovH"></div><div class="sec-s" id="ovS"></div>
+    <div class="kpis" id="kpis"></div>
+    <div class="card mt">
+      <div class="chart-head"><div><b style="font-size:15px">Demand by account</b><div class="hint" style="margin-top:2px">Click an account to see its proposals</div></div>
+      <div class="toggle" id="demandToggle"><button data-k="opp" class="on">Opportunities</button><button data-k="prop">Proposals</button></div></div>
+      <div class="bars" id="demandBars"></div><div class="hint" id="demandNote"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="p-pipeline">
+    <div class="sec-h">Pipeline conversion</div><div class="sec-s" id="pipS"></div>
+    <div class="grid2">
+      <div class="card"><div class="fhead">Opportunities <small id="oppCount"></small></div><div class="funnel" id="oppFunnel"></div></div>
+      <div class="card"><div class="fhead">Proposals <small id="propCount"></small></div><div class="funnel" id="propFunnel"></div></div>
+    </div>
+    <div class="totbar"><span id="pipNote"></span><span class="tv" id="pipLive"></span></div>
+  </section>
+
+  <section class="panel" id="p-opportunities">
+    <div class="sec-h">Opportunities</div><div class="sec-s">Every opportunity the Hub supported. Filter by account or stage; click a row for the detail.</div>
+    <div class="chips" id="oppStageChips"></div><div class="chips" id="oppAcctChips"></div>
+    <div class="card" style="padding:0;overflow:hidden"><table><thead><tr><th>Opportunity</th><th>Account</th><th>Stage</th></tr></thead><tbody id="oppBody"></tbody></table></div>
+    <div class="totbar"><span id="oppTot"></span></div>
+  </section>
+
+  <section class="panel" id="p-proposals">
+    <div class="sec-h">Proposals</div><div class="sec-s">Every proposal with its value and status. Filter by status or account; click a row for the detail.</div>
+    <div class="chips" id="statusChips"></div><div class="chips" id="acctChips"></div>
+    <div class="card" style="padding:0;overflow:hidden"><table><thead><tr><th>Proposal</th><th>Account</th><th class="rt">Value</th><th>Status</th></tr></thead><tbody id="propBody"></tbody></table></div>
+    <div class="totbar"><span id="totLabel"></span><span class="tv" id="totVal"></span></div>
+  </section>
+
+  <section class="panel" id="p-losses">
+    <div class="sec-h">Loss analysis</div><div class="sec-s" id="lossS"></div>
+    <div class="themes" id="themes"></div>
+    <div class="card" style="padding:0;overflow:hidden"><table><thead><tr><th>Lost proposal</th><th>Account</th><th class="rt">Value</th><th>Debrief reason</th></tr></thead><tbody id="lossBody"></tbody></table></div>
+  </section>
+
+  <section class="panel" id="p-team">
+    <div class="sec-h">Team hours &amp; billability</div><div class="sec-s" id="teamS"></div>
+    <div class="card"><div class="chart-head"><b style="font-size:15px">Billability by person</b>
+      <div class="toggle" id="billToggle"><button data-k="indirect" class="on">Indirect</button><button data-k="direct">Direct</button></div></div>
+      <div class="bars" id="billBars"></div></div>
+    <div class="tcallout" id="teamCallout"></div>
+  </section>
+
+  <section class="panel" id="p-ask">
+    <div class="sec-h">Ask about this quarter</div><div class="sec-s">Type a question and Claude answers from the data on this page — including every opportunity and proposal.</div>
+    <div class="ask-chips" id="askChips"></div>
+    <div class="ask-box"><input id="askInput" type="text" placeholder="e.g. Which pending bids are biggest?" autocomplete="off"><button id="askBtn">Ask</button></div>
+    <div class="ask-log" id="askLog"><div class="ask-empty">Answers are generated by Claude from the selected quarter's figures. Try a suggestion, or ask your own.</div></div>
+  </section>
+
+  <footer>
+    <div class="conf">⚠ Internal BCG — share within your organisation; do not publish to the public web</div><br>
+    Source: Dashboard_Draft_Q1_2026.xlsx (user-provided). Add later quarters with the CSV template above. Interactive build — review before external use.
+  </footer>
+</main>
+
+<script>
+/* ============ DATA (derived live from records, so a new quarter refreshes everything) ============ */
+const QUARTERS={
+ "Q1 2026":{
+  records:[
+   /* opportunities */
+   {t:"Opportunity",a:"FCDO",n:"Nigeria",s:"Moved to proposal in Q2"},
+   {t:"Opportunity",a:"FCDO",n:"JETPAK – looking to submit (35M GBP)",s:""},
+   {t:"Opportunity",a:"FCDO",n:"JIGT – looking to lead (90M GBP)",s:""},
+   {t:"Opportunity",a:"WB",n:"Supporting the Energy Transition in Emerging Markets & Developing Countries",s:"Pending EOI outcome"},
+   {t:"Opportunity",a:"WB",n:"Climate-Smart Capital Investment Planning & Revenue Innovation Support for Kenyan Counties",s:"Dropped"},
+   {t:"Opportunity",a:"WB",n:"Market Analysis of Private Early Childhood Care in Mexico",s:"Shortlisted, dropped at proposal (low budget)"},
+   {t:"Opportunity",a:"WB",n:"Telecom Assessment Lao PDR",s:"Pending EOI outcome"},
+   {t:"Opportunity",a:"WB",n:"Sustainable Finance Market Scoping: Green Lending with MSMEs in Thailand",s:"Shortlisted, dropped at proposal (low budget)"},
+   {t:"Opportunity",a:"WB",n:"GEF Engagement in Central Asia",s:"Dropped due to scope"},
+   {t:"Opportunity",a:"WB",n:"Sri Lanka Capital Market Development",s:"Dropped due to scope"},
+   {t:"Opportunity",a:"WB",n:"SME Access to Finance Assessment for the Philippines",s:"Dropped due to scope"},
+   {t:"Opportunity",a:"WB",n:"Market Entry & Expansion (#606732)",s:"EOI shortlisted, dropped at proposal (low budget)"},
+   {t:"Opportunity",a:"ADB",n:"AI-Driven Water Evaluation",s:"Pending outcome"},
+   {t:"Opportunity",a:"ADB",n:"ADB Tidal Energy",s:"Dropped due to scope"},
+   {t:"Opportunity",a:"EU-INTPA",n:"Uzbekistan Ag Strategy",s:"Pending EOI results"},
+   {t:"Opportunity",a:"EU-INTPA",n:"LAC Policy Dialogue",s:"Pending EOI results"},
+   {t:"Opportunity",a:"EU-INTPA",n:"ECOWAS Transport",s:"Pending EOI results"},
+   {t:"Opportunity",a:"EU-INTPA",n:"Global TAF",s:"Pending EOI results"},
+   {t:"Opportunity",a:"EU-INTPA",n:"MENA Energy",s:"Pending EOI results"},
+   {t:"Opportunity",a:"EU-INTPA",n:"Macedonia Energy Policy",s:"Dropped"},
+   {t:"Opportunity",a:"EU-INTPA",n:"Africa Space Partnership",s:"Dropped"},
+   {t:"Opportunity",a:"EU-INTPA",n:"EU Morocco Culture C4P",s:"Dropped"},
+   /* proposals */
+   {t:"Proposal",a:"FCDO",n:"Brazil Agriculture Programme",v:335850,s:"Pending outcome"},
+   {t:"Proposal",a:"WB",n:"Pandemic Fund: Analysis of the Intersection of PPPR & Health Resilience",v:299000,s:"Pending outcome"},
+   {t:"Proposal",a:"WB",n:"Pre-Feasibility Study of Blended Finance Solutions for Malaysia",v:212490,s:"Won"},
+   {t:"Proposal",a:"ADB",n:"Long Term Climate Strategy in the Philippines",v:865000,s:"Pending proposal result"},
+   {t:"Proposal",a:"ADB",n:"Marshall Island: Strengthening Coastal Protection & Food Security for Rural Climate Resilience",v:465000,s:"Lost due to generic approach and team compliance"},
+   {t:"Proposal",a:"ADB",n:"Philippines Watershed Management",v:450000,s:"Lost on compliance"},
+   {t:"Proposal",a:"GIZ",n:"SA JUST SMME Facility",v:1195340,s:"Not submitted"},
+   {t:"Proposal",a:"Others",n:"FSD ETH Climate Finance RFP",v:600000,s:"Pending outcome"},
+   {t:"Proposal",a:"Others",n:"GCF",v:995000,s:"Pending outcome"}
+  ],
+  team:[
+   {n:"Julian",prop:3,opp:4,hrs:450,bill:312,direct:60,indirect:0},
+   {n:"Serish",prop:5,opp:16,hrs:377,bill:6,direct:1,indirect:72},
+   {n:"Millicent",prop:9,opp:10,hrs:375,bill:12,direct:2,indirect:75},
+   {n:"Ahmad",prop:6,opp:11,hrs:397,bill:6,direct:0,indirect:79}
+  ],
+  notes:{wbPortal:true}
+ }
+};
+
+const ACCT_ORDER=["WB","EU-INTPA","FCDO","ADB","GIZ","Others","DFAT","UN","USAID"];
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const fmt=v=>v==null?"—":"$"+(v/1e6).toFixed(2)+"M";
+const esc=s=>(""+s).replace(/[&<]/g,c=>({"&":"&amp;","<":"&lt;"}[c]));
+
+/* derive status / stage */
+function propStatus(s){s=(s||"").toLowerCase();
+ if(s.includes("won"))return"Won"; if(s.includes("lost"))return"Lost";
+ if(s.includes("not submitted"))return"Not submitted"; return"Pending";}
+function oppStage(s){s=(s||"").toLowerCase();
+ if(s.includes("moved to proposal"))return"Advancing";
+ if(s.includes("drop"))return"No-go"; return"Early positioning";}
+
+let CUR=null, derived=null;
+function recompute(q){
+ const Q=QUARTERS[q]; const recs=Q.records;
+ const opps=recs.filter(r=>r.t==="Opportunity"), props=recs.filter(r=>r.t==="Proposal");
+ const accts=ACCT_ORDER.filter(a=>recs.some(r=>r.a===a));
+ const demand={}; accts.forEach(a=>demand[a]={opp:opps.filter(o=>o.a===a).length,prop:props.filter(p=>p.a===a).length});
+ const propVal=props.reduce((s,p)=>s+(p.v||0),0);
+ const out={Won:0,Lost:0,Pending:0,"Not submitted":0}; props.forEach(p=>out[propStatus(p.s)]++);
+ const stage={Advancing:0,"Early positioning":0,"No-go":0}; opps.forEach(o=>stage[oppStage(o.s)]++);
+ const decided=out.Won+out.Lost; const winRate=decided?Math.round(out.Won/decided*100):0;
+ const pendingVal=props.filter(p=>propStatus(p.s)==="Pending").reduce((s,p)=>s+(p.v||0),0);
+ const hrs=Q.team.reduce((s,t)=>s+t.hrs,0), billed=Q.team.reduce((s,t)=>s+t.bill,0);
+ const nonJ=Q.team.filter(t=>t.indirect>0); const avgIndirect=nonJ.length?Math.round(nonJ.reduce((s,t)=>s+t.indirect,0)/nonJ.length):0;
+ const directTeam=Math.round(Q.team.filter(t=>t.direct>0).reduce((s,t)=>s+t.direct,0)/Math.max(1,Q.team.filter(t=>t.direct>0).length));
+ const indirectTeamArr=Q.team.map(t=>t.indirect); const indirectTeam=Math.round(indirectTeamArr.reduce((a,b)=>a+b,0)/indirectTeamArr.length);
+ derived={q,Q,opps,props,accts,demand,propVal,out,stage,winRate,decided,pendingVal,hrs,billed,avgIndirect,directTeam,indirectTeam};
+ return derived;
+}
+
+/* ============ TABS ============ */
+const TABS=[["overview","Overview"],["pipeline","Pipeline"],["opportunities","Opportunities"],["proposals","Proposals"],["losses","Losses"],["team","Team"],["ask","✦ Ask AI"]];
+$("#tabrow").innerHTML=TABS.map(([id,l],i)=>`<button class="tab${i?'':' on'}" data-id="${id}">${l}</button>`).join("");
+$$(".tab").forEach(b=>b.onclick=()=>{$$(".tab").forEach(t=>t.classList.remove("on"));b.classList.add("on");
+ $$(".panel").forEach(p=>p.classList.remove("on"));$("#p-"+b.dataset.id).classList.add("on");window.scrollTo({top:0,behavior:"smooth"});});
+
+/* ============ RENDER ALL ============ */
+let demandKey="opp",selAcct=null,billKey="indirect";
+let fStatus="All",fAcct="All",fStage="All",fOAcct="All";
+
+function renderAll(){
+ const d=recompute(CUR);
+ // overview
+ $("#ovH").textContent=`${CUR} at a glance`;
+ $("#ovS").textContent=`${d.opps.length+d.props.length} BD engagements — ${d.opps.length} opportunities and ${d.props.length} proposals.`;
+ const kpis=[
+  [String(d.opps.length+d.props.length),"BD engagements",`${d.opps.length} opps + ${d.props.length} proposals`],
+  [fmt(d.propVal),"Proposal value","Hub-supported pipeline"],
+  [d.decided?d.winRate+"%":"—","Win rate (decided)",`${d.out.Won} won of ${d.decided} decided`],
+  [d.directTeam+"%","Direct billability",`Team avg (those billing)`],
+  [d.avgIndirect+"%","Indirect (excl. 0%)","Bid-support engine"],
+  [d.hrs.toLocaleString(),"BD hours",`${d.Q.team.length}-person team`]
+ ];
+ $("#kpis").innerHTML=kpis.map((k,i)=>`<div class="kpi" style="animation-delay:${i*70}ms"><div class="v">${k[0]}</div><div class="l">${k[1]}</div><div class="s">${k[2]}</div></div>`).join("");
+ drawDemand();
+ // pipeline
+ $("#pipS").textContent=`${d.opps.length} opportunities filtered to ${d.props.length} proposals — ${d.out.Won} won, ${d.out.Pending} still pending.`;
+ $("#oppCount").textContent=`${d.opps.length} supported`; $("#propCount").textContent=`${d.props.length} submitted`;
+ const of=[["Advancing","good","advancing to proposal"],["Early positioning","neu","pending / in play"],["No-go","neu","dropped or out of scope"]];
+ $("#oppFunnel").innerHTML=of.map(([k,c,desc])=>`<div class="fstep ${c}" data-stage="${k}"><div class="fn">${d.stage[k]}</div><div><div class="fl">${k}</div><div class="fs">${desc}</div></div></div>`).join("");
+ $$("#oppFunnel .fstep").forEach(el=>el.onclick=()=>{goTab("opportunities");fStage=el.dataset.stage;fOAcct="All";renderOpps();});
+ const pf=[["Won","good"],["Lost","neu"],["Pending","neu"],["Not submitted","neu"]];
+ $("#propFunnel").innerHTML=pf.map(([k,c])=>`<div class="fstep ${c}" data-st="${k}"><div class="fn">${d.out[k]}</div><div><div class="fl">${k}</div><div class="fs">${k==="Pending"?fmt(d.pendingVal)+" of upside":(k==="Won"?"decided win":"")}</div></div></div>`).join("");
+ $$("#propFunnel .fstep").forEach(el=>el.onclick=()=>{goTab("proposals");fStatus=el.dataset.st;fAcct="All";renderProps();});
+ $("#pipNote").innerHTML=`<b>Disciplined conversion</b> — ${Math.round(d.stage["No-go"]/Math.max(1,d.opps.length)*100)}% of opportunities filtered out; ${d.out.Won} of ${d.decided} decided proposals won (${d.winRate}%)`;
+ $("#pipLive").textContent=fmt(d.pendingVal)+" live";
+ renderOpps(); renderProps();
+ // losses
+ const losses=d.props.filter(p=>propStatus(p.s)==="Lost");
+ $("#lossS").textContent=losses.length?`${losses.length} lost proposal${losses.length>1?"s":""} this quarter — debrief reasons below.`:"No lost proposals recorded this quarter.";
+ $("#themes").innerHTML=[
+  ["Team & Compliance","CV alignment and team fit were decisive in the debriefs."],
+  ["Methodology Fit","Watch for generic approaches flagged in feedback."],
+  ["Expert requirements","ADB weighs approved / SN-registered experts and local experts where the ToR specifies them."]
+ ].map(t=>`<div class="theme"><h4>${t[0]}</h4><p>${t[1]}</p></div>`).join("");
+ $("#lossBody").innerHTML=losses.length?losses.map(l=>`<tr><td>${esc(l.n)}</td><td>${l.a}</td><td class="rt">${fmt(l.v)}</td><td>${esc(l.s)}</td></tr>`).join(""):`<tr><td colspan="4" style="color:var(--muted);padding:16px">None this quarter.</td></tr>`;
+ // team
+ $("#teamS").textContent=`${d.hrs.toLocaleString()} BD hours logged; ${d.billed} billed.`;
+ drawBill();
+ const jul=d.Q.team.find(t=>t.direct>=50);
+ $("#teamCallout").innerHTML=
+  (jul?`<div class="tco"><b>${jul.n} carries direct billability</b><br><span>${jul.direct}% direct (${jul.bill} of ${jul.hrs} hrs billed) — the delivery anchor</span></div>`:"")
+  +`<div class="tco"><span class="big">~${d.avgIndirect}%</span><br><b>Avg indirect billability</b> <span>— excluding anyone at 0%; the team's bid-support load</span></div>`;
+ // ask context refresh handled at call time
+ setupAskChips();
+}
+function goTab(id){$$(".tab").forEach(t=>t.classList.toggle("on",t.dataset.id===id));$$(".panel").forEach(p=>p.classList.remove("on"));$("#p-"+id).classList.add("on");window.scrollTo({top:0,behavior:"smooth"});}
+
+function drawDemand(){
+ const d=derived,max=Math.max(...d.accts.map(a=>d.demand[a][demandKey]),1);
+ $("#demandBars").innerHTML=d.accts.map(a=>{const val=d.demand[a][demandKey],w=val/max*100;
+  return `<div class="brow ${demandKey==='prop'?'alt':''} ${selAcct===a?'sel':''}" data-a="${a}"><div class="bn">${a}</div><div class="bt"><div class="bf" data-w="${w}"></div></div><div class="bv">${val}</div></div>`;}).join("");
+ requestAnimationFrame(()=>$$("#demandBars .bf").forEach(f=>f.style.width=f.dataset.w+"%"));
+ $$("#demandBars .brow").forEach(r=>r.onclick=()=>{selAcct=selAcct===r.dataset.a?null:r.dataset.a;drawDemand();note();});
+ note();
+ function note(){const el=$("#demandNote");
+  if(selAcct){const dm=d.demand[selAcct];el.innerHTML=`<b style="color:var(--green)">${selAcct}</b>: ${dm.opp} opportunities · ${dm.prop} proposals. <a href="#" id="gp" style="color:var(--green);font-weight:600">See ${selAcct} proposals →</a>`;
+   $("#gp").onclick=e=>{e.preventDefault();goTab("proposals");fAcct=selAcct;fStatus="All";renderProps();};}
+  else{el.innerHTML=d.Q.notes.wbPortal?"World Bank typically leads volume; ADB drives proposal activity. The Hub also runs the WB procurement portal.":"Click an account to drill in.";}}
+}
+$$("#demandToggle button").forEach(b=>b.onclick=()=>{$$("#demandToggle button").forEach(x=>x.classList.remove("on"));b.classList.add("on");demandKey=b.dataset.k;drawDemand();});
+
+/* opportunities table */
+function chips(el,items,cur,set){el.innerHTML=items.map(i=>`<button class="chip ${i===cur?'on':''}" data-v="${i}">${i}</button>`).join("");
+ el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>set(c.dataset.v));}
+function renderOpps(){
+ const d=derived; const stages=["All","Advancing","Early positioning","No-go"]; const accts=["All",...d.accts.filter(a=>d.opps.some(o=>o.a===a))];
+ chips($("#oppStageChips"),stages,fStage,v=>{fStage=v;renderOpps();});
+ chips($("#oppAcctChips"),accts,fOAcct,v=>{fOAcct=v;renderOpps();});
+ const tc={"Advancing":"t-adv","Early positioning":"t-early","No-go":"t-nogo"};
+ const rows=d.opps.filter(o=>(fStage==="All"||oppStage(o.s)===fStage)&&(fOAcct==="All"||o.a===fOAcct));
+ $("#oppBody").innerHTML=rows.length?rows.map((o,i)=>{const st=oppStage(o.s);
+  return `<tr class="r" data-oi="${i}"><td>${esc(o.n)}</td><td>${o.a}</td><td><span class="tag ${tc[st]}">${st}</span></td></tr>
+   <tr class="det" data-od="${i}"><td colspan="3"><div class="inner"><b>Account:</b> ${o.a} &nbsp;·&nbsp; <b>Stage:</b> ${st}<br><b>Status note:</b> ${o.s?esc(o.s):"—"}</div></td></tr>`;}).join(""):`<tr><td colspan="3" style="color:var(--muted);padding:16px">No opportunities match this filter.</td></tr>`;
+ $$("#oppBody tr.r").forEach(r=>r.onclick=()=>{const dd=$(`#oppBody tr.det[data-od="${r.dataset.oi}"]`);if(dd)dd.classList.toggle("on");});
+ $("#oppTot").innerHTML=`${rows.length} opportunit${rows.length!==1?"ies":"y"}${fStage!=="All"?" · "+fStage:""}${fOAcct!=="All"?" · "+fOAcct:""}`;
+}
+/* proposals table */
+const tagClass=s=>({"Won":"t-won","Lost":"t-lost","Pending":"t-pend","Not submitted":"t-not"})[s];
+function renderProps(){
+ const d=derived; const statuses=["All","Won","Lost","Pending","Not submitted"]; const accts=["All",...d.accts.filter(a=>d.props.some(p=>p.a===a))];
+ chips($("#statusChips"),statuses,fStatus,v=>{fStatus=v;renderProps();});
+ chips($("#acctChips"),accts,fAcct,v=>{fAcct=v;renderProps();});
+ const rows=d.props.filter(p=>(fStatus==="All"||propStatus(p.s)===fStatus)&&(fAcct==="All"||p.a===fAcct));
+ $("#propBody").innerHTML=rows.length?rows.map((p,i)=>`<tr class="r" data-pi="${i}"><td>${esc(p.n)}</td><td>${p.a}</td><td class="rt">${fmt(p.v)}</td><td><span class="tag ${tagClass(propStatus(p.s))}">${propStatus(p.s)}</span></td></tr>
+  <tr class="det" data-pd="${i}"><td colspan="4"><div class="inner"><b>Account:</b> ${p.a} &nbsp;·&nbsp; <b>Value:</b> ${fmt(p.v)} &nbsp;·&nbsp; <b>Status:</b> ${esc(p.s)}</div></td></tr>`).join(""):`<tr><td colspan="4" style="color:var(--muted);padding:16px">No proposals match this filter.</td></tr>`;
+ $$("#propBody tr.r").forEach(r=>r.onclick=()=>{const dd=$(`#propBody tr.det[data-pd="${r.dataset.pi}"]`);if(dd)dd.classList.toggle("on");});
+ const tot=rows.reduce((s,p)=>s+(p.v||0),0);
+ $("#totLabel").textContent=`${rows.length} proposal${rows.length!==1?"s":""}${fStatus!=="All"?" · "+fStatus:""}${fAcct!=="All"?" · "+fAcct:""}`;
+ $("#totVal").textContent=fmt(tot);
+}
+/* team bills */
+function drawBill(){const d=derived,max=Math.max(...d.Q.team.map(t=>t[billKey]),1);
+ $("#billBars").innerHTML=d.Q.team.map(t=>{const val=t[billKey],w=val/Math.max(max,80)*100;
+  return `<div class="brow ${billKey==='indirect'?'':'alt'}"><div class="bn">${t.n}</div><div class="bt"><div class="bf" data-w="${w}"></div></div><div class="bv">${val}%</div></div>`;}).join("");
+ requestAnimationFrame(()=>$$("#billBars .bf").forEach(f=>f.style.width=f.dataset.w+"%"));}
+$$("#billToggle button").forEach(b=>b.onclick=()=>{$$("#billToggle button").forEach(x=>x.classList.remove("on"));b.classList.add("on");billKey=b.dataset.k;drawBill();});
+
+/* ============ QUARTER PICKER ============ */
+function refreshQuarterPicker(){$("#qPick").innerHTML=Object.keys(QUARTERS).map(q=>`<option ${q===CUR?'selected':''}>${q}</option>`).join("");}
+$("#qPick").onchange=e=>{CUR=e.target.value;selAcct=null;fStatus=fAcct=fStage=fOAcct="All";renderAll();};
+
+/* ============ CSV UPLOAD / TEMPLATE ============ */
+function parseCSV(txt){const rows=[];let i=0,f="",row=[],q=false;
+ while(i<txt.length){const c=txt[i];
+  if(q){if(c==='"'){if(txt[i+1]==='"'){f+='"';i++;}else q=false;}else f+=c;}
+  else{if(c==='"')q=true;else if(c===','){row.push(f);f="";}else if(c==='\n'||c==='\r'){if(c==='\r'&&txt[i+1]==='\n')i++;if(f!==""||row.length){row.push(f);rows.push(row);row=[];f="";}}else f+=c;}
+  i++;}
+ if(f!==""||row.length){row.push(f);rows.push(row);}return rows;}
+$("#upBtn").onclick=()=>$("#fileIn").click();
+$("#fileIn").onchange=e=>{const file=e.target.files[0];if(!file)return;const rd=new FileReader();
+ rd.onload=()=>{try{
+  const rows=parseCSV(rd.result.trim()).filter(r=>r.some(c=>c.trim()!==""));
+  const head=rows.shift().map(h=>h.trim().toLowerCase());
+  const ix=n=>head.indexOf(n);
+  const byQ={};
+  rows.forEach(r=>{const q=(r[ix("quarter")]||"").trim();if(!q)return;
+   const rec={t:(r[ix("type")]||"").trim().toLowerCase().startsWith("opp")?"Opportunity":"Proposal",a:(r[ix("account")]||"").trim(),n:(r[ix("name")]||"").trim(),s:(r[ix("status")]||"").trim()};
+   const vraw=(r[ix("value")]||"").replace(/[^0-9.]/g,"");if(rec.t==="Proposal")rec.v=vraw?Number(vraw):null;
+   (byQ[q]=byQ[q]||[]).push(rec);});
+  let added=0;Object.keys(byQ).forEach(q=>{
+   const existed=QUARTERS[q]; QUARTERS[q]={records:byQ[q],team:existed?existed.team:[],notes:existed?existed.notes:{}};added++;});
+  if(!added){msg("No rows found — check the template columns.",true);return;}
+  CUR=Object.keys(byQ)[Object.keys(byQ).length-1];refreshQuarterPicker();renderAll();
+  msg(`Loaded ${added} quarter(s): ${Object.keys(byQ).join(", ")}. (Team billability isn't in the CSV — keep that in Claude or tell me to add a team template.)`,false);
+ }catch(err){msg("Couldn't read that file. Use the downloaded template format.",true);}};
+ rd.readAsText(file);e.target.value="";};
+function msg(t,err){const m=$("#dataMsg");m.textContent=t;m.style.color=err?"#a3592f":"var(--green)";}
+$("#tplBtn").onclick=()=>{
+ const head=["Quarter","Type","Account","Name","Value","Status","Notes"];
+ const lines=[head.join(",")];
+ Object.keys(QUARTERS).forEach(q=>QUARTERS[q].records.forEach(r=>{
+  const cells=[q,r.t,r.a,r.n,r.v!=null?r.v:"",r.s,""].map(c=>{c=""+c;return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c;});
+  lines.push(cells.join(","));}));
+ const blob=new Blob([lines.join("\n")],{type:"text/csv"});const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");a.href=url;a.download="DI_Hub_data_template.csv";a.click();URL.revokeObjectURL(url);
+ msg("Template downloaded (pre-filled with current data). Add rows for the new quarter and upload.",false);};
+
+/* ============ ASK AI ============ */
+function buildContext(){const d=recompute(CUR);const L=[];
+ L.push(`BCG International Development (DI) Hub — ${CUR} business development scorecard.`);
+ L.push(`Totals: ${d.opps.length+d.props.length} BD engagements (${d.opps.length} opportunities + ${d.props.length} proposals); proposal value $${d.propVal.toLocaleString()}; win rate on decided bids ${d.winRate}% (${d.out.Won} of ${d.decided}); ${d.hrs.toLocaleString()} BD hours, ${d.billed} billed; team direct billability ~${d.directTeam}%, average indirect (excl. 0%) ~${d.avgIndirect}%.`);
+ L.push("Demand by account (opps/proposals): "+d.accts.map(a=>`${a} ${d.demand[a].opp}/${d.demand[a].prop}`).join("; ")+".");
+ L.push("Opportunities (account | name | stage | status): "+d.opps.map(o=>`${o.a} | ${o.n} | ${oppStage(o.s)} | ${o.s||"n/a"}`).join("; ")+".");
+ L.push("Proposals (account | name | value | status): "+d.props.map(p=>`${p.a} | ${p.n} | $${(p.v||0).toLocaleString()} | ${p.s}`).join("; ")+".");
+ L.push(`Outcomes: Won ${d.out.Won}, Lost ${d.out.Lost}, Pending ${d.out.Pending} (~$${d.pendingVal.toLocaleString()} upside), Not submitted ${d.out["Not submitted"]}. Opportunity stages: Advancing ${d.stage.Advancing}, Early positioning ${d.stage["Early positioning"]}, No-go ${d.stage["No-go"]}.`);
+ L.push("Team billability (name: hrs spent, hrs billed, direct%, indirect%): "+d.Q.team.map(t=>`${t.n}: ${t.hrs}, ${t.bill}, ${t.direct}%, ${t.indirect}%`).join("; ")+(d.Q.notes.wbPortal?". The Hub also runs the World Bank procurement portal.":"."));
+ return L.join("\n");}
+const SUGGESTED=["Summarise this quarter in 3 bullets for the MDP","Which pending bids are biggest, and what's the total upside?","List the ADB opportunities and how they ended","How does billability look excluding anyone at 0%?","What drove the losses and what should we fix?"];
+function setupAskChips(){$("#askChips").innerHTML=SUGGESTED.map(q=>`<button class="ask-chip">${q}</button>`).join("");
+ $$("#askChips .ask-chip").forEach(c=>c.onclick=()=>{$("#askInput").value=c.textContent;ask();});}
+let asking=false;
+$("#askBtn").onclick=ask; $("#askInput").addEventListener("keydown",e=>{if(e.key==="Enter")ask();});
+async function ask(){const q=$("#askInput").value.trim();if(!q||asking)return;asking=true;$("#askBtn").disabled=true;
+ const em=$("#askLog .ask-empty");if(em)em.remove();
+ const card=document.createElement("div");card.className="qa";
+ card.innerHTML=`<div class="q">${esc(q)}</div><div class="a"><span class="dots"><span></span><span></span><span></span></span></div>`;
+ $("#askLog").prepend(card);$("#askInput").value="";const ans=card.querySelector(".a");
+ try{const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,
+    system:"You are a concise business-development analyst for BCG's DI Hub. Answer ONLY from the data below. Be brief and specific, use the actual numbers, prefer a short sentence or tight bullet list, never invent figures. If the data doesn't cover it, say so in one line.\n\nDATA:\n"+buildContext(),
+    messages:[{role:"user",content:q}]})});
+  const data=await res.json();const text=(data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n").trim();
+  ans.className="a";ans.textContent=text||"No answer returned — try rephrasing.";
+ }catch(err){ans.className="a err";ans.textContent="AI answers run when this dashboard is opened inside Claude (in chat or shared). The Claude connection isn't available here.";}
+ asking=false;$("#askBtn").disabled=false;}
+
+/* ============ INIT ============ */
+CUR=Object.keys(QUARTERS)[0];
+refreshQuarterPicker();
+renderAll();
+</script>
